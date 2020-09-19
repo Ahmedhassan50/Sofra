@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "374004359281",
+    "firebase_url": "https://sofra-29cb3.firebaseio.com",
+    "project_id": "sofra-29cb3",
+    "storage_bucket": "sofra-29cb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374004359281:android:1693fcc88912cd0fa0fbd0",
+        "android_client_info": {
+          "package_name": "com.example.sofra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374004359281-6lqqv63vr45c0aegqkfmbll0uaohu2t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmwiRdmYEvSNhYosQstv49Icu06P3a3Os"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374004359281-6lqqv63vr45c0aegqkfmbll0uaohu2t5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
