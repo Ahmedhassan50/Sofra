@@ -30,8 +30,11 @@ class MealSellProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetMeals() async {
-    final url = 'https://sofra-29cb3.firebaseio.com/meals.json';
+  Future<void> fetchAndSetMeals(String resId,
+      [bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$resId"' : '';
+    final url = 'https://sofra-29cb3.firebaseio.com/meals.json?$filterString';
     try {
       final response = await http.get(url);
       final extractData = json.decode(response.body) as Map<String, dynamic>;
@@ -42,14 +45,14 @@ class MealSellProvider with ChangeNotifier {
       extractData.forEach((mealId, mealData) {
         loadedMeals.add(
           Meal(
-            id: mealId,
-            name: mealData['name'],
-            describtion: mealData['describtion'],
-            price: mealData['price'],
-            price_in_offer: mealData['price_in_offer'],
-            time_of_order: mealData['time_of_order'],
-            imageUrl: mealData['imageUrl'],
-          ),
+              id: mealId,
+              name: mealData['name'],
+              describtion: mealData['describtion'],
+              price: mealData['price'],
+              price_in_offer: mealData['price_in_offer'],
+              time_of_order: mealData['time_of_order'],
+              imageUrl: mealData['imageUrl'],
+              creatorId: mealData['creatorId']),
         );
       });
       _meal = loadedMeals;
@@ -60,17 +63,16 @@ class MealSellProvider with ChangeNotifier {
   }
 
   Future<void> addMeal(Meal meal) async {
-    String id;
+    // String id;
 
-    final idUrl =
-        'https://sofra-29cb3.firebaseio.com/resturants/$userId.json?auth=$authToken';
+    //final idUrl ='https://sofra-29cb3.firebaseio.com/resturants/$userId.json?auth=$authToken';
 
     try {
-      final idData = await http.get(idUrl);
-      final loadeData = json.decode(idData.body) as Map<String, dynamic>;
-      id = (loadeData.keys.first).toString();
+      // final idData = await http.get(idUrl);
+      //final loadeData = json.decode(idData.body) as Map<String, dynamic>;
+      //id = (loadeData.keys.first).toString();
       final url =
-          'https://sofra-29cb3.firebaseio.com/resturants/$userId/$id/meals.json?auth=$authToken';
+          'https://sofra-29cb3.firebaseio.com/meals.json?auth=$authToken';
 
       await _uploadImage();
       final response = await http.post(url,
@@ -81,17 +83,18 @@ class MealSellProvider with ChangeNotifier {
             'price_in_offer': meal.price_in_offer,
             'time_of_order': meal.time_of_order,
             'imageUrl': imageFileUrl,
+            'creatorId': userId
           }));
 
       final newMeal = Meal(
-        id: json.decode(response.body)['name'],
-        name: meal.name,
-        describtion: meal.describtion,
-        price: meal.price,
-        price_in_offer: meal.price_in_offer,
-        time_of_order: meal.time_of_order,
-        imageUrl: imageFileUrl,
-      );
+          id: json.decode(response.body)['name'],
+          name: meal.name,
+          describtion: meal.describtion,
+          price: meal.price,
+          price_in_offer: meal.price_in_offer,
+          time_of_order: meal.time_of_order,
+          imageUrl: imageFileUrl,
+          creatorId: userId);
 
       _meal.add(newMeal);
       notifyListeners();

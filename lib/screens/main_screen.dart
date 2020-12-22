@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sofra/foodrequest/provider/auth_user.dart';
+import 'package:sofra/widgets/appbar.dart';
 import '../foodrequest/screens/notification_screen.dart';
 import '../foodrequest/screens/cart_screen.dart';
 import '../provider/main_provider.dart';
@@ -19,29 +21,7 @@ class _MainScreenState extends State<MainScreen> {
     final mainData = Provider.of<MainProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              Icons.notifications_none,
-              color: Colors.pink,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, NotificationsScreen.routename);
-            }),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(
-                Icons.shopping_cart,
-                color: Colors.pink,
-                size: 30,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, CartScreen.routename);
-              })
-        ],
-        elevation: 0,
-      ),
+      appBar: MainAppbar().appbar(context),
       body: mainData.getpage[mainData.index],
       bottomNavigationBar: BottomNavigationBar(
           onTap: mainData.changepage,

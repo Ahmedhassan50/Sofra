@@ -8,67 +8,58 @@ import 'package:sofra/widgets/navigationbar.dart';
 import '../widgets/resturant_details_tab.dart';
 
 class RestoruntDetails extends StatelessWidget {
-  static const routename='/restount-screen';
+  static const routename = '/restount-screen';
   @override
   Widget build(BuildContext context) {
-
-
-    final mainData=Provider.of<MainProvider>(context,listen: false);
-   
+    final mainData = Provider.of<MainProvider>(context, listen: false);
+    final resid = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      appBar: MainAppbar().appbar(context) ,
-      bottomNavigationBar: MainNavbar(ontab: (index){
-        mainData.changepage(index);
-      
-        Navigator.of(context).popUntil( ModalRoute.withName(MainScreen.routename));
-      },),
+      appBar: MainAppbar().appbar(context),
+      bottomNavigationBar: MainNavbar(
+        ontab: (index) {
+          mainData.changepage(index);
 
-
-
-
-
-
-      body: 
-         Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 10
-            ),
-            child: SingleChildScrollView(
-                          child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    direction: Axis.vertical,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.red,
-                        backgroundImage: AssetImage('assets/images/homebackground2.jpg'),
-                        maxRadius: 70,
-                      ),
-                      Text(
-                        'دجاج كنتاكي',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.pink,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                  
-                 ResDetailsTab(),
-                ],
-              ),
+          Navigator.of(context)
+              .popUntil(ModalRoute.withName(MainScreen.routename));
+        },
+      ),
+      body: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  direction: Axis.vertical,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: Colors.red,
+                      backgroundImage:
+                          AssetImage('assets/images/homebackground2.jpg'),
+                      maxRadius: 70,
+                    ),
+                    Text(
+                      'دجاج كنتاكي',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.pink,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                ResDetailsTab(resid),
+              ],
             ),
           ),
         ),
-      
+      ),
     );
   }
 }

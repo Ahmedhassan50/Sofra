@@ -9,12 +9,14 @@ class Meal {
   final double price_in_offer;
   final int time_of_order;
   final String imageUrl;
+  final String creatorId;
 
   Meal({
     @required this.id,
     @required this.name,
     @required this.describtion,
     @required this.price,
+    this.creatorId,
     this.price_in_offer,
     this.time_of_order,
     @required this.imageUrl,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sofra/foodrequest/provider/auth_user.dart';
 import 'package:sofra/foodrequest/provider/cart_provider.dart';
+import 'package:sofra/foodrequest/screens/home_screen.dart';
+import 'package:sofra/foodrequest/screens/order_details_screen.dart';
 import 'package:sofra/provider/main_provider.dart';
 import 'package:sofra/screens/main_screen.dart';
 import 'package:sofra/widgets/appbar.dart';
@@ -8,27 +11,24 @@ import 'package:sofra/widgets/navigationbar.dart';
 import '../widgets/cart_list.dart';
 import '../screens/login_screen.dart';
 
-
-
 class CartScreen extends StatelessWidget {
-  static const routename='/cart-screen';
+  static const routename = '/cart-screen';
   @override
   Widget build(BuildContext context) {
-    final mainData=Provider.of<MainProvider>(context,listen: false);
-     final cartData=Provider.of<Cart>(context);
+    final mainData = Provider.of<MainProvider>(context, listen: false);
+    final cartData = Provider.of<Cart>(context);
+    final _authUser = Provider.of<AuthUser>(context, listen: false);
     return Scaffold(
-      appBar: MainAppbar().appbar(context) ,
-      bottomNavigationBar: MainNavbar(ontab: (index){
-        mainData.changepage(index);
-      
-        Navigator.of(context).popUntil( ModalRoute.withName(MainScreen.routename));
-      },),
+      appBar: MainAppbar().appbar(context),
+      bottomNavigationBar: MainNavbar(
+        ontab: (index) {
+          mainData.changepage(index);
 
-
-
-
-
-      body:  Container(
+          Navigator.of(context)
+              .popUntil(ModalRoute.withName(MainScreen.routename));
+        },
+      ),
+      body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -39,50 +39,57 @@ class CartScreen extends StatelessWidget {
               elevation: 5,
               shape: CircleBorder(),
               child: Container(
-                alignment: Alignment.center,
-                width: 80,
-                height: 80,
-                child: Text('${cartData.totalPrice} جنية')),
+                  alignment: Alignment.center,
+                  width: 80,
+                  height: 80,
+                  child: Text('${cartData.totalPrice} جنية')),
             ),
-
             Row(
-             mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-              RaisedButton(onPressed: (){
-         Navigator.of(context).pushNamed(LoginScreen.routename);
-              },
-              color: Colors.pink,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20
+                RaisedButton(
+                  onPressed: () {
+                    (_authUser.isAuth)
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(builder: (ctx) => OrderDetails()))
+                        : Navigator.of(context)
+                            .pushNamed(LoginScreen.routename);
+                  },
+                  color: Colors.pink,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'تاكيد الطلب',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                child: Text('تاكيد الطلب',style: TextStyle(
-                  color: Colors.white,
-                ),),
-              ),
-              ),
-              RaisedButton(onPressed: (){},
-              color: Colors.pink,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20
+                RaisedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(MainScreen.routename);
+                  },
+                  color: Colors.pink,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'إضافة المزيد .',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                child: Text('إضافة المزيد .',style: TextStyle(
-                  color: Colors.white,
-                ),),
-              ),
-              ),
-            ],)
+              ],
+            )
           ],
         ),
       ),
-      
     );
   }
 }

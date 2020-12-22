@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:sofra/foodsell/provider/auth_sell.dart';
 
+import 'package:sofra/foodsell/provider/auth_sell.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sofra/foodsell/screens/login_screen.dart';
 import 'package:sofra/resources/assets_constant.dart';
 import 'package:sofra/screens/main_screen.dart';
 import 'package:sofra/screens/main_sell.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routename = '/';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    //getUserid();
+  }
+
+  void getUserid() async {
+    var one = await OneSignal.shared.getPermissionSubscriptionState();
+    print(one.subscriptionStatus.userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);

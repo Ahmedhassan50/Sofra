@@ -1,5 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+import 'package:sofra/foodsell/provider/auth_sell.dart';
 import 'package:sofra/foodsell/provider/meal_sell_provider.dart';
 import '../screens/add_meal.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -7,12 +10,15 @@ import '../screens/update_meal.dart';
 
 class HomeSell extends StatelessWidget {
   static const routename = '/Home-sell';
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
   @override
   Widget build(BuildContext context) {
+    final _authData = Provider.of<AuthSell>(context, listen: false);
     return Scaffold(
       body: FutureBuilder(
         future: Provider.of<MealSellProvider>(context, listen: false)
-            .fetchAndSetMeals(),
+            .fetchAndSetMeals(_authData.resData.id, true),
         builder: (ctx, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? Center(
@@ -39,7 +45,7 @@ class HomeSell extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               alignment: Alignment.center,
                               child: Text(
-                                'مطعم الصحاب',
+                                '${_authData.resData.name}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -84,8 +90,8 @@ class HomeSell extends StatelessWidget {
                                         leading: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: Image.asset(
-                                            'assets/images/homebackground2.jpg',
+                                          child: Image.network(
+                                            '${mealData.maels[i].imageUrl}',
                                           ),
                                         ),
                                         title: Text(mealData.maels[i].name),
@@ -111,6 +117,14 @@ class HomeSell extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
+          /*  
+          OneSignal.shared.setNotificationOpenedHandler(
+              (OSNotificationOpenedResult result) {
+           // Navigator.of(context).pushNamed(AddMeal.routname);
+          });*/
+          /* _fcm.getToken().then((value) {
+            print(value);
+          });*/
           Navigator.of(context).pushNamed(AddMeal.routname);
         },
         child: Icon(

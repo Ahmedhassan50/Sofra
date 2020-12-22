@@ -26,9 +26,10 @@ class Restaurant_Provider with ChangeNotifier {
       authToken = regresponseData['idToken'];
       userId = regresponseData['localId'];
       final url =
-          'https://sofra-29cb3.firebaseio.com/resturants/$userId.json?auth=$authToken';
+          'https://sofra-29cb3.firebaseio.com/resturants.json?auth=$authToken';
       final response = await http.post(url,
           body: json.encode({
+            'id': userId,
             'name': resData.name,
             'email': resData.email,
             'mobile': resData.mobile,
@@ -39,9 +40,9 @@ class Restaurant_Provider with ChangeNotifier {
             'delivarymobile': resData.deliveryData.mobile,
             'delivarywhatsUp': resData.deliveryData.whatsUp,
           }));
-      print(json.decode(response.body)['name']);
+      // print(json.decode(response.body)['name']);
       final newRes = Resturant(
-        id: json.decode(response.body)['name'],
+        id: userId,
         name: resData.name,
         email: resData.email,
         mobile: resData.mobile,
@@ -55,6 +56,35 @@ class Restaurant_Provider with ChangeNotifier {
       );
 
       _resturant.add(newRes);
+
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchAndSetResturant() async {
+    final url = 'https://sofra-29cb3.firebaseio.com/resturants.json';
+    try {
+      final response = await http.get(url);
+      final loadData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Resturant> resData = [];
+      //print(response.body);
+      loadData.forEach((id, value) {
+        resData.add(Resturant(
+            id: value['id'],
+            name: value['name'],
+            email: value['email'],
+            mobile: value['mobile'],
+            password: value['password'],
+            categories: value['categories'],
+            minimum_charge: value['minimum_charge'],
+            delivery: value['delivery'],
+            deliveryData: DeliveryData(
+                mobile: value['delivarymobile'],
+                whatsUp: value['delivarywhatsUp'])));
+      });
+      _resturant = resData;
 
       notifyListeners();
     } catch (e) {

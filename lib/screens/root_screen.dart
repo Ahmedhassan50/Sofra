@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sofra/foodrequest/provider/auth_user.dart';
 import 'package:sofra/foodrequest/provider/cart_provider.dart';
+import 'package:sofra/foodrequest/provider/notification_provider.dart';
+import 'package:sofra/foodrequest/provider/order_provider.dart';
 import 'package:sofra/foodsell/provider/auth_sell.dart';
 import 'package:sofra/foodsell/provider/meal_sell_provider.dart';
 import 'package:sofra/provider/main_sell_provider.dart';
@@ -57,6 +60,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
+        ChangeNotifierProvider.value(value: AuthUser()),
+        ChangeNotifierProxyProvider<AuthUser, OrderProvider>(
+            create: (BuildContext context) => OrderProvider(),
+            update: (ctx, auth, order) =>
+                OrderProvider(token: auth.token, userId: auth.userId)),
         ChangeNotifierProvider.value(
           value: AuthSell(),
         ),
@@ -70,6 +78,9 @@ class MyApp extends StatelessWidget {
           update: (ctx, auth, res) =>
               MealSellProvider(authToken: auth.token, userId: auth.userId),
         ),
+        ChangeNotifierProvider.value(
+          value: NotificationProvider()
+          )
 
         /*ChangeNotifierProxyProvider<Restaurant_Provider,MealSellProvider>(
           create: (BuildContext context) =>MealSellProvider(),
